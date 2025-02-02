@@ -15,7 +15,7 @@ import os
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.environ.get("FLASK_KEY")
 app.config['WTF_CSRF_SECRET_KEY'] = os.environ.get("CSRF_KEY")
-app.config['UPLOAD_FOLDER'] = "C:/Users/srajs/Downloads"
+app.config['UPLOAD_FOLDER'] = "C:/"
 csrf = CSRFProtect(app)
 csrf.init_app(app)
 Bootstrap5(app)
@@ -25,7 +25,7 @@ verify = Email()
 class Base(DeclarativeBase):
     pass
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///justgamer.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get(DB_URL, 'sqlite:///justgamer.db')
 db = SQLAlchemy(model_class=Base)
 db.init_app(app)
 
