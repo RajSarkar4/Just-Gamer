@@ -25,7 +25,7 @@ verify = Email()
 class Base(DeclarativeBase):
     pass
 
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get(DB_URL, 'sqlite:///justgamer.db')
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DB_URL', 'sqlite:///justgamer.db')
 db = SQLAlchemy(model_class=Base)
 db.init_app(app)
 
