@@ -1,0 +1,202 @@
+{% from "bootstrap5/form.html" import render_form %}
+{% extends "header.html" %}
+{% block content %}
+<div class="container box">
+  {% if is_edit %}
+  <h1 style="margin-left: 20%;">Update Profile</h1>
+  {% else %}
+    <h1 style="margin-left: 20%;">Register</h1>
+    {% endif %}
+    <main class="mb-4">
+        <div class="container">
+          <div class="row">
+            {% with messages = get_flashed_messages() %}
+                    {% if messages %}
+                        {% for message in messages %}
+                    <p class="flash">{{ message }}</p>
+                    {% endfor %}
+                    {% endif %}
+                    {% endwith %}
+                    {% if is_edit %}
+            <form action="" method="post" class="form" role="form" novalidate enctype="multipart/form-data">
+              
+              {{ form.csrf_token }}
+              <div class="mb-3 required">
+              <img id="profilePreview" src="{{ url_for('get_image', id=current_user.id, title='user')}}" alt="Profile Preview">
+              <label class="form-label" for="logo">Logo</label>
+              <input class="form-control" id="logo" name="logo" required="" type="file">
+            </div>
+                <div class="mb-3 required">
+                  {{ form.email.label(class="form-label") }}
+                  {{ form.email(class="form-control", id="emailInput") }}
+                </div>
+                <div class="mb-3 required">
+                  {{ form.name.label(class="form-label") }}
+                  {{ form.name(class="form-control") }}
+                </div>
+                <input class="btn btn-primary btn-md" id="submit" name="submit" type="submit" value="Save Change">
+            </form><br>
+            {% else %}
+            <div class="">
+              <form action="" id="otpForm" method="post" class="form" role="form" novalidate>
+                {{ form.csrf_token }}
+                <div class="mb-3 required">
+                  {{ form.email.label(class="form-label") }}
+                  {{ form.email(class="form-control", id="emailInput") }}
+                </div>
+                <div class="mb-3 required">
+                  {{ form.name.label(class="form-label") }}
+                  {{ form.name(class="form-control") }}
+                </div>
+                <div class="mb-3 required">
+                  {{ form.discord.label(class="form-label") }}
+                  {{ form.discord(class="form-control") }}
+                </div>
+                <div class="mb-3 required">
+                  {{ form.instagram.label(class="form-label") }}
+                  {{ form.instagram(class="form-control") }}
+                </div>
+                <div class="mb-3 required">
+                  {{ form.password.label(class="form-label") }}
+                  {{ form.password(class="form-control") }}
+                </div>
+                <div class="mb-3 required">
+                  {{ form.confirm.label(class="form-label") }}
+                  {{ form.confirm(class="form-control") }}
+                </div>
+                <div class="mb-3 required">
+                  {{ form.otp.label(class="form-label") }}
+                  <tr>
+                    <div class="otp-input-container">
+                      <!-- Input Field -->
+                      {{ form.otp(class="form-control otp-input", placeholder="Enter OTP") }}
+                      
+                      <!-- Inline Button -->
+                      <button type="button" class="otp-button btn" id="sendOtpButton" onclick="verifyOtp(event)">
+                        <a id="otpText" onclick="email(); otpsend()" class="hov">OTP</a>
+                      </button>
+                    </div>
+                    <!-- <button type="button" class="otp-button" id="sendOtpButton">Send OTP</button> -->
+                    <td><button class="btn otp" id="verifyButton"><a class="hov" href="">Verify</a></button></td>
+                    <span id="tickMark" class="tick d-none">✔</span>
+                  </tr>   
+                </div>
+                <div id="feedback" class="feedback"></div>
+                <input class="btn btn-primary btn-md" id="submit" name="submit" type="submit" value="Sign Up">
+                
+
+              </form>
+            </div>
+          </div>
+        </div>
+      </main>
+    <div class="footer">
+        <p>Already have account. <a href="{{ url_for('login') }}">Sign In</a></p>
+    </div>
+</div>
+{% endif %}
+<script>
+  function email(){
+    const email = document.getElementById("emailInput").value;
+    const csrf_token = document.getElementById("csrf_token").value;
+    console.log(email)
+    fetch('/send_otp', {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json',  // Correct Content-Type
+        'X-CSRFToken': csrf_token,  // Include the CSRF token
+    },
+    body: JSON.stringify({ email: email }), // JSON data
+});
+  }
+  function otpsend() {
+            // Make a GET request to the Flask route that runs the Python function
+            fetch('/send-otp', {
+                method: 'GET'
+            })
+        }
+  $(document).ready(function () {
+            $("#verifyButton").on("click", function (event) {
+                event.preventDefault(); // Prevent form reload
+
+                const otp = $("#otpForm input[name='otp']").val();
+
+                // Send the OTP to Flask for validation
+                const csrfToken = $("#csrf_token").val();
+
+                $.ajax({
+                    url: "/validate_otp",
+                    type: "POST",
+                    contentType: "application/json",
+                    headers: { "X-CSRFToken": csrfToken },
+                    data: JSON.stringify({ otp: otp }),
+                    success: function (response) {
+                        const feedback = $("#feedback");
+                        const tickMark = $("#tickMark");
+
+                        if (response.status === "success") {
+                            feedback.removeClass("error").addClass("success").text(response.message);
+                            tickMark.removeClass("d-none"); // Show the tick mark
+                        } else {
+                            feedback.removeClass("success").addClass("error").text(response.message);
+                            tickMark.addClass("d-none"); // Hide the tick mark
+                        }
+                    },
+                    error: function (xhr) {
+                        const feedback = $("#feedback");
+                        feedback.removeClass("success").addClass("error").text(
+                            xhr.responseJSON ? xhr.responseJSON.message : "An error occurred while validating the OTP."
+                        );
+                    }
+                });
+
+
+              // Prevent the form from reloading the page
+              $("#otpForm").on("submit", function (event) {
+                  event.preventDefault();
+
+                  // Gather all form data and send to Flask if needed
+                  const formData = $(this).serialize();
+
+                  $.ajax({
+                      url: "/register",
+                      type: "POST",
+                      data: formData,
+                      success: function (response) {
+                          window.location.href = '{{url_for("home")}}'
+                      },
+                      error: function () {
+                          alert("An error occurred while submitting the form.");
+                      }
+                  });
+              });
+          });
+
+        })
+        function verifyOtp(event) {
+          event.preventDefault(); // Prevent the page from reloading when the button is clicked
+          
+          const button = document.getElementById('sendOtpButton');
+          const otpText = document.getElementById('otpText');
+          let countdown = 120; // Timer in seconds
+
+
+          // Disable the button and start the timer
+          button.disabled = true;
+          otpText.textContent = `${countdown}s`;
+
+          // Start countdown
+          const timer = setInterval(() => {
+            countdown -= 1;
+            otpText.textContent = `${countdown}s`;
+
+            // Once countdown reaches 0, re-enable button
+            if (countdown <= 0) {
+              clearInterval(timer);
+              button.disabled = false;
+              otpText.textContent = "OTP";
+            }
+          }, 1000); // Update every second
+        }
+</script>
+{% endblock %}

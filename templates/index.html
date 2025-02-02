@@ -1,0 +1,143 @@
+{% extends "header.html" %}
+
+    {% block content %}
+    <!-- Header Section -->
+    <header class="header">
+        <div class="header-text">
+            <h1>Welcome to Our Ecosystem</h1>
+            <p>We conduct esport tournaments and keep a good winning prizes. Join the contest and get the chance to win all the prize.</p>
+            <p>Keep playing, Keep Winning..</p>
+        </div>
+        <div class="header-image">
+            <img src="{{ url_for('get_image', id=4, title='default') }}" alt="Header Image">
+        </div>
+    </header>
+
+    <!-- Updates Section -->
+    <section class="updates-section">
+        <h2>Latest Challenges</h2>
+        <ul class="updates-list">
+            <li>
+                <a href="{{ url_for('contest', type='solo') }}">
+                    <h3>Contest 1: Solo Showdown</h3>
+                    <p>Join the solo showdown and show them who is the boss here.</p>
+                </a>
+            </li>
+            <li>
+                <a href="{{ url_for('contest', type='duo') }}">
+                    <h3>Contest 2: Dua Showdown</h3>
+                    <p>Time to show the best tag team champions.</p>
+                </a>
+            </li>
+            <li>
+                <a href="{{ url_for('contest', type='squard') }}">
+                    <h3>Contest 3: Squard Fight</h3>
+                    <p>Ready to brwal, Just bring it on.</p>
+                </a>
+            </li>
+        </ul>
+    </section>
+    <!-- Winners Section -->
+    <section class="winners-section">
+        <h2>Challenge Winners</h2><br>
+        {% if winners %}
+        {% for winner in winners %}
+        <div class="winner active" id="winner1">
+            <img src="{{ url_for('get_image', id=winner.lgame_id, title='winner') }}" alt="Winner 1">
+            <p><strong>{{winner.team_name}}</strong> - Winner of {{winner.title}}</p>
+        </div>
+        {% endfor %}
+        {% endif %}
+        <!-- <div class="winner" id="winner2">
+            <img src="https://via.placeholder.com/100" alt="Winner 2">
+            <p><strong>Jane Smith</strong> - Winner of Challenge 2</p>
+        </div>
+        <div class="winner" id="winner3">
+            <img src="https://via.placeholder.com/100" alt="Winner 3">
+            <p><strong>Samuel Johnson</strong> - Winner of Challenge 3</p>
+        </div> -->
+    </section>
+
+    <!-- Stats Section -->
+    <section class="stats-section">
+        <div class="stats-container">
+            <div class="stat-box">
+                <h3 id="challengers-count">100</h3>
+                <p>Total Challengers</p>
+            </div>
+            <div class="stat-box">
+                <h3 id="challenges-count">100</h3>
+                <p>Challenges Held</p>
+            </div>
+            <div class="stat-box">
+                <h3 id="winners-count">100</h3>
+                <p>Total Winners</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Us Section -->
+    <section id="About" class="about-section" style="padding-bottom: 20px;">
+        <h2>About Us</h2>
+        <p>
+            Hey there! I'm Just Gamer, a passionate gamer, content creator, and your go-to buddy for epic gaming adventures. Whether it’s dominating the battlefield, solving tricky puzzles, or diving into immersive storylines, I’m here to bring you the best of gaming with a touch of humor, strategy, and fun!
+        </p>
+    </section>
+
+    <!-- Contact Us Section -->
+    <section id="Contect" class="contact-section">
+        <h2>Contact Us</h2>
+        <p>Connect with us through social media or drop us an email. We'd love to hear from you!</p>
+        <div class="contact-details">
+            <p>Email: <a href="mailto:support@challenges.com">skillsonly16@gmail.com.com</a></p>
+            <div class="social-media">
+                <a href="https://www.youtube.com/@Just_Gamer0" target="_blank">
+                    <i class="fa-brands fa-youtube fa-2xl" style="color: #e66565;"></i>
+                </a>
+                <a href="https://discord.gg/queWZZhMRk" target="_blank">
+                    <i class="fa-brands fa-discord fa-2xl"></i>
+                </a>
+                <a href="https://www.instagram.com/justgamer.843" target="_blank">
+                    <i class="fa-brands fa-instagram fa-2xl" style="color: #ff00c8;"></i>
+                </a>
+            </div>
+        </div>
+    </section>
+    <script>
+        const winners = document.querySelectorAll('.winner');
+        let currentIndex = 0;
+      
+        function showNextWinner() {
+            winners[currentIndex].classList.remove('active'); // Hide current winner
+            currentIndex = (currentIndex + 1) % winners.length; // Move to next winner
+            winners[currentIndex].classList.add('active'); // Show next winner
+        }
+      
+        // Change winner every 3 seconds
+        setInterval(showNextWinner, 3000);
+      
+        // Function to animate the counters
+        function animateCounter(id, target, duration) {
+            const element = document.getElementById(id);
+            let start = 0;
+            const increment = Math.ceil(target / (duration / 20));
+            const interval = setInterval(() => {
+                start += increment;
+                if (start > target) {
+                    start = target;
+                    clearInterval(interval);
+                }
+                element.textContent = start;
+            }, 20);
+        }
+      
+        // Start counters on page load
+        window.onload = () => {
+            animateCounter("challengers-count", 1200, 2000); // 1200 challengers
+            animateCounter("challenges-count", 45, 2000); // 45 challenges held
+            animateCounter("winners-count", 15, 2000); // 15 total winners
+        };
+      </script>
+    {% endblock %}
+    
+    

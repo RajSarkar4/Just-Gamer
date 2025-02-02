@@ -1,0 +1,22 @@
+{% from "bootstrap5/form.html" import render_form %}
+{% extends "header.html" %}
+
+{% block content %}
+
+<div class="joined-card content-box" id="form-container">
+    <main class="mb-4">
+        <div class="container">
+            <div class="row">
+                <div class="joined">
+                    <div class="card">
+                        <h2>Joined Successfully.</h2>
+                        <p>Thanks for the participation match timing will be sent to you're Email.</p>
+                        <button class="btn"><a class="finish" href="{{ url_for('home') }}">Finsish</a></button>
+                    </div>
+                </div>
+            </div>
+            </div>
+        </div>
+        </main>
+</div>
+    {% endblock %}

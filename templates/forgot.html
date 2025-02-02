@@ -1,0 +1,151 @@
+{% from "bootstrap5/form.html" import render_form %}
+{% extends "header.html" %}
+{% block content %}
+
+<div class="container box"> 
+    <h1 style="margin-left: 25%;">Forgot Password</h1>
+    <main class="mb-4">
+        <div class="container">
+            <div class="row">
+              {% with messages = get_flashed_messages() %}
+                    {% if messages %}
+                        {% for message in messages %}
+                    <p class="flash">{{ message }}</p>
+                    {% endfor %}
+                    {% endif %}
+                    {% endwith %}
+                <div>
+                  {% if verified %}
+                  <form action="" method="post" class="form" role="form" novalidate>
+                    {{form.csrf_token}}
+                    <div class="mb-3 required">
+                      {{ form.password.label(class="form-label") }}
+                      {{ form.password(class="form-control") }}
+                    </div>
+                    <div class="mb-3 required">
+                      {{ form.confirm.label(class="form-label") }}
+                      {{ form.confirm(class="form-control") }}
+                    </div>
+                    <input class="btn btn-primary btn-md" id="submit" name="submit" type="submit" value="Reset">
+                  </form>
+                  {% else %}
+                  {% if is_otp %}
+                  <form action="" method="post" class="form" role="form" novalidate>
+                    {{form.csrf_token}}
+                    <div class="mb-3 required">
+                      {{ form.otp.label(class="form-label") }}
+                      {{ form.otp(class="form-control", id="otpInput") }}
+                    </div>
+                    <input class="btn btn-primary btn-md" id="submit" name="submit" type="submit" value="Verify">
+                  </form>
+                  {% else %}
+                    <form action="" method="post" class="form" role="form" novalidate>
+                        {{form.csrf_token}}
+                        <div class="mb-3 required">
+                            {{ form.email.label(class="form-label") }}
+                            {{ form.email(class="form-control", id="emailInput") }}
+                          </div>
+                          <input class="btn btn-primary btn-md" id="submit" name="submit" type="submit" value="Submit">
+                    </form>
+                    {% endif %}
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+
+<script>
+    // function otpsend() {
+    //         // Make a GET request to the Flask route that runs the Python function
+    //         fetch('/forgot-password', {
+    //             method: 'GET'
+    //         })
+    //         .then(response => bool='yes')
+    //     }
+    //     function verifyOtp(event) {
+    //       event.preventDefault(); // Prevent the page from reloading when the button is clicked
+          
+    //       const button = document.getElementById('sendOtpButton');
+    //       const otpText = document.getElementById('otpText');
+    //       let countdown = 120; // Timer in seconds
+
+
+    //       // Disable the button and start the timer
+    //       button.disabled = true;
+    //       otpText.textContent = `${countdown}s`;
+
+    //       // Start countdown
+    //       const timer = setInterval(() => {
+    //         countdown -= 1;
+    //         otpText.textContent = `${countdown}s`;
+
+    //         // Once countdown reaches 0, re-enable button
+    //         if (countdown <= 0) {
+    //           clearInterval(timer);
+    //           button.disabled = false;
+    //           otpText.textContent = "OTP";
+    //         }
+    //       }, 1000); // Update every second
+    //     }
+    //     $(document).ready(function () {
+    //         $("#verifyButton").on("click", function (event) {
+    //             event.preventDefault(); // Prevent form reload
+
+    //             const otp = $("#otpForm input[name='otp']").val();
+
+    //             // Send the OTP to Flask for validation
+    //             const csrfToken = $("#csrf_token").val();
+
+    //             $.ajax({
+    //                 url: "/validate_otp",
+    //                 type: "POST",
+    //                 contentType: "application/json",
+    //                 headers: { "X-CSRFToken": csrfToken },
+    //                 data: JSON.stringify({ otp: otp }),
+    //                 success: function (response) {
+    //                     const feedback = $("#feedback");
+    //                     const tickMark = $("#tickMark");
+
+    //                     if (response.status === "success") {
+    //                         feedback.removeClass("error").addClass("success").text(response.message);
+    //                         tickMark.removeClass("d-none"); // Show the tick mark
+    //                     } else {
+    //                         feedback.removeClass("success").addClass("error").text(response.message);
+    //                         tickMark.addClass("d-none"); // Hide the tick mark
+    //                     }
+    //                 },
+    //                 error: function (xhr) {
+    //                     const feedback = $("#feedback");
+    //                     feedback.removeClass("success").addClass("error").text(
+    //                         xhr.responseJSON ? xhr.responseJSON.message : "An error occurred while validating the OTP."
+    //                     );
+    //                 }
+    //             });
+
+
+    //           // Prevent the form from reloading the page
+    //           $("#otpForm").on("submit", function (event) {
+    //               event.preventDefault();
+
+    //               // Gather all form data and send to Flask if needed
+    //               const formData = $(this).serialize();
+
+    //               // $.ajax({
+    //               //     url: "/forgot-password",
+    //               //     type: "POST",
+    //               //     data: formData,
+    //               //     success: function (response) {
+    //               //         window.location.href = '{{url_for("home")}}'
+    //               //     },
+    //               //     error: function () {
+    //               //         alert("An error occurred while submitting the form.");
+    //               //     }
+    //               // });
+    //           });
+    //       });
+
+    //     })
+</script>
+
+{% endblock %}

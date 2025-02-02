@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <script src="https://kit.fontawesome.com/874003cbe1.js" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-primary">
+        <div class="navbar-logo">
+            <img src="{{ url_for('get_image', id=3, title='default') }}" alt="Logo">
+            <span class="logo">Just Gamer</span>
+        </div>
+        {% if not current_user.is_authenticated %}
+        <img src="{{ url_for('get_image', id=1, title='default')}}" 
+                  alt="Profile Icon" 
+                  class="profile-icon" 
+                  data-bs-toggle="offcanvas" 
+                  data-bs-target="#offcanvasProfile" 
+                  aria-controls="offcanvasProfile">
+        {% else %}
+            <img src="{{ url_for('get_image', id=current_user.id, title='user')}}" 
+                  alt="Profile Icon" 
+                  class="profile-icon" 
+                  data-bs-toggle="offcanvas" 
+                  data-bs-target="#offcanvasProfile" 
+                  aria-controls="offcanvasProfile">
+        {% endif %}
+    </div>
+    </nav>
+    <section>
+      <div class="offcanvas offcanvas-start offcanvas-profile" tabindex="-1" id="offcanvasProfile" aria-labelledby="offcanvasProfileLabel">
+        <div class="profile-header">
+          
+          {% if not current_user.is_authenticated %}
+          <a href="{{url_for('login')}}" class="btn btn-danger">SignIn</a>
+          {% else %}
+            <h5 class="offcanvas-title" id="offcanvasProfileLabel">Profile Details</h5>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="profile-details">
+            <img src="{{ url_for('get_image', id=current_user.id, title='user')}}" alt="Profile Picture" class="profile-icon mb-3">
+            <h4>{{ current_user.name }}</h4>
+            <p><strong>Email:</strong> {{ current_user.email }}</p>
+            <a href="{{url_for('update', id=current_user.id)}}" class="btn btn-primary mb-2">Edit</a>
+            <a href="{{url_for('logout')}}" class="btn btn-danger">Logout</a>
+        </div>
+        {% endif %}
+    </div>
+    </section>
+
+ 
+{% block content %}
+{% endblock %}
+    <!-- Footer -->
+<footer class="footer">
+  <p>Website designed by <a href="#" target="_blank">Raj Sarkar</a>.</p>
+  <p>&copy; 2025 Just Gamer. All rights reserved.</p>
+</footer>
+<script>
+    function saveProfile(){
+        fetch('/update-profile/{{current_user.id}}',{
+            method: 'GET'
+        })
+    }
+
+</script>
+</body>
+</html>

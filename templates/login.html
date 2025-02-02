@@ -1,0 +1,31 @@
+{% from "bootstrap5/form.html" import render_form %}
+{% extends "header.html" %}
+    {% block content %}
+        <div class="container box">
+            <h1 style="margin-left: 25%;">Login</h1>
+            <main class="mb-4">
+                <div class="container">
+                <div class="row">
+                    {% with messages = get_flashed_messages() %}
+                    {% if messages %}
+                        {% for message in messages %}
+                    <p class="flash">{{ message }}</p>
+                    {% endfor %}
+                    {% endif %}
+                    {% endwith %}
+                    <div class="">
+                    {{ render_form(form, novalidate=True, button_map={"submit": "primary"}) }}
+                    </div>
+                    <div >
+                        <a href="{{ url_for('forgot') }}">Forgot Password?</a>
+                    </div>
+                </div>
+                </div>
+            </main>
+            
+            <div class="footer">
+                <p>Don't have an account? <a href="{{ url_for('register') }}">Sign Up</a></p>
+            </div>
+        </div>
+    
+{% endblock %}
