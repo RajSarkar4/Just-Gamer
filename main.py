@@ -1,7 +1,7 @@
 from flask import Flask, render_template, url_for, flash, request, redirect, Response, jsonify, abort, send_file
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
-from sqlalchemy import Integer, String, Text
+from sqlalchemy import Integer, String, Text, LargeBinary
 from form import LoginForm, RegistrationForm, SoloContestForm, DuoContestForm, SquardContestForm, AddWinnerForm, DefaultForm, ForgotForm
 from flask_login import UserMixin, login_user, LoginManager, current_user, logout_user, login_required
 from flask_wtf import CSRFProtect
@@ -15,7 +15,7 @@ import os
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.environ.get("FLASK_KEY")
 app.config['WTF_CSRF_SECRET_KEY'] = os.environ.get("CSRF_KEY")
-app.config['UPLOAD_FOLDER'] = "C:/"
+app.config['UPLOAD_FOLDER'] = "C:/Users/srajs/Downloads"
 csrf = CSRFProtect(app)
 csrf.init_app(app)
 Bootstrap5(app)
@@ -25,7 +25,7 @@ verify = Email()
 class Base(DeclarativeBase):
     pass
 
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DB_URL', 'sqlite:///justgamer.db')
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get("DB_URL", 'sqlite:///justgamer.db')
 db = SQLAlchemy(model_class=Base)
 db.init_app(app)
 
@@ -39,7 +39,7 @@ class User(UserMixin, db.Model):
     name: Mapped[str] = mapped_column(String(250), nullable=False)
     discord: Mapped[str] = mapped_column(String(250), nullable=False)
     instagram: Mapped[str] = mapped_column(String(250), nullable=False)
-    logo: Mapped[str] = mapped_column(Text, nullable=False)
+    logo: Mapped[str] = mapped_column(LargeBinary, nullable=False)
     mimtype: Mapped[str] = mapped_column(Text, nullable=False)
 
 # Website Data table
@@ -48,7 +48,7 @@ class Defaults(db.Model):
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     filename: Mapped[str] = mapped_column(Text, nullable=False)
-    logo: Mapped[str] = mapped_column(Text, nullable=False)
+    logo: Mapped[str] = mapped_column(LargeBinary, nullable=False)
     mimtype: Mapped[str] = mapped_column(Text, nullable=False)
 
 #Winners Table
@@ -59,7 +59,7 @@ class Winner(db.Model):
     lgame_id: Mapped[str] = mapped_column(String(250), nullable=False)
     title: Mapped[str] = mapped_column(String(250), nullable=False)
     team_name: Mapped[str] = mapped_column(String(250), nullable=False)
-    logo: Mapped[str] = mapped_column(Text, nullable=False)
+    logo: Mapped[str] = mapped_column(LargeBinary, nullable=False)
     mimtype: Mapped[str] = mapped_column(Text, nullable=False)
 
 # Solo Contest table
@@ -72,7 +72,7 @@ class SoloContest(db.Model):
     trophy: Mapped[int] = mapped_column(Integer, nullable=False)
     year: Mapped[int] = mapped_column(Integer, nullable=False)
     team_name: Mapped[str] = mapped_column(String(250), unique=True, nullable=True)
-    logo: Mapped[str] = mapped_column(Text, nullable=False)
+    logo: Mapped[str] = mapped_column(LargeBinary, nullable=False)
     mimtype: Mapped[str] = mapped_column(Text, nullable=False)
 
 
@@ -86,7 +86,7 @@ class DuoContest(db.Model):
     member_id: Mapped[str] = mapped_column(String(250), unique=True, nullable=False)
     member_name: Mapped[str] = mapped_column(String(250), nullable=False)
     team_name: Mapped[str] = mapped_column(String(250), unique=True, nullable=False)
-    logo: Mapped[str] = mapped_column(Text, nullable=False)
+    logo: Mapped[str] = mapped_column(LargeBinary, nullable=False)
     mimtype: Mapped[str] = mapped_column(Text, nullable=False)
 
 # Squard Contest table
@@ -105,7 +105,7 @@ class SquardContest(db.Model):
     extra_id: Mapped[str] = mapped_column(String(250), unique=True, nullable=True)
     extra_name: Mapped[str] = mapped_column(String(250), nullable=True)
     team_name: Mapped[str] = mapped_column(String(250), unique=True, nullable=False)
-    logo: Mapped[str] = mapped_column(Text, nullable=False)
+    logo: Mapped[str] = mapped_column(LargeBinary, nullable=False)
     mimtype: Mapped[str] = mapped_column(Text, nullable=False)
 
 
