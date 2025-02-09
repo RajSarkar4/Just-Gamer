@@ -464,7 +464,7 @@ def exportexcel(type):
     df = pd.DataFrame(data_list)
     filename = "contesntents.xlsx"
 
-    writer = pd.ExcelWriter(filename)
+    writer = pd.ExcelWriter(filename, engine = 'xlsxwriter')
     df.to_excel(writer, sheet_name=type)
     writer._save()
 
