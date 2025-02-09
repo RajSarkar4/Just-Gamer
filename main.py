@@ -463,10 +463,9 @@ def exportexcel(type):
     data_list = [to_dict(item) for item in data]
     df = pd.DataFrame(data_list)
     filename = "contesntents.xlsx"
-    print("Filename: "+filename)
 
     writer = pd.ExcelWriter(filename)
-    df.to_excel(writer, sheet_name=type.title)
+    df.to_excel(writer, sheet_name=type)
     writer._save()
 
     return send_file(filename)
