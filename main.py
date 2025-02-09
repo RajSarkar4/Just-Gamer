@@ -15,7 +15,7 @@ import os
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.environ.get("FLASK_KEY")
 app.config['WTF_CSRF_SECRET_KEY'] = os.environ.get("CSRF_KEY")
-app.config['UPLOAD_FOLDER'] = "C:/Users/srajs/Downloads"
+app.config['UPLOAD_FOLDER'] = "/"
 csrf = CSRFProtect(app)
 csrf.init_app(app)
 Bootstrap5(app)
