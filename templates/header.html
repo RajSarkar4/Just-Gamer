@@ -44,6 +44,7 @@
         <div class="profile-header">
           
           {% if not current_user.is_authenticated %}
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
           <a href="{{url_for('login')}}" class="btn btn-danger">SignIn</a>
           {% else %}
             <h5 class="offcanvas-title" id="offcanvasProfileLabel">Profile Details</h5>
