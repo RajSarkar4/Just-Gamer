@@ -9,6 +9,7 @@ from flask_bootstrap import Bootstrap5
 from email_verify import Email
 from functools import wraps
 import pandas as pd
+import tempfile
 import os
 
 #Initializing Flask application confugiration
@@ -440,15 +441,9 @@ def reset(id):
     return render_template('forgot.html', verified=True, form=form)
 
 
-def to_dict(row):
-    if row is None:
-        return None
-
-    rtn_dict = dict()
-    keys = row.__table__.columns.keys()
-    for key in keys:
-        rtn_dict[key] = getattr(row, key)
-    return rtn_dict
+def to_dict(obj):
+    """Convert SQLAlchemy object to dictionary"""
+    return {column.name: getattr(obj, column.name) for column in obj.__table__.columns}
 
 
 @admin_only
@@ -460,15 +455,25 @@ def exportexcel(type):
         data = DuoContest.query.all()
     elif type == "squard":
         data = SquardContest.query.all()
+    else:
+        return "Invalid contest type", 400  # Return error if type is invalid
+
+    # Convert data to a list of dictionaries
     data_list = [to_dict(item) for item in data]
+
+    # Convert to DataFrame
     df = pd.DataFrame(data_list)
-    filename = "contesntents.xlsx"
 
-    writer = pd.ExcelWriter(filename, engine = 'xlsxwriter')
-    df.to_excel(writer, sheet_name=type)
-    writer._save()
+    # Create a temporary file
+    temp_file = tempfile.NamedTemporaryFile(delete=False, suffix=".xlsx")
+    filename = temp_file.name
 
-    return send_file(filename)
+    # Write DataFrame to Excel
+    with pd.ExcelWriter(filename, engine="xlsxwriter") as writer:
+        df.to_excel(writer, sheet_name=type, index=False)
+
+    return send_file(filename, as_attachment=True, download_name=f"{type}_contestants.xlsx", mimetype="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+
 
 @admin_only
 @app.route("/clear/<type>")
