@@ -25,14 +25,14 @@
             </li>
             <li>
                 <a href="{{ url_for('contest', type='duo') }}">
-                    <h3>Contest 2: Dua Showdown</h3>
+                    <h3>Contest 2: Duo Showdown</h3>
                     <p>Time to show the best tag team champions.</p>
                 </a>
             </li>
             <li>
                 <a href="{{ url_for('contest', type='squard') }}">
                     <h3>Contest 3: Squard Fight</h3>
-                    <p>Ready to brwal, Just bring it on.</p>
+                    <p>Ready to brawl, Just bring it on.</p>
                 </a>
             </li>
         </ul>
@@ -43,19 +43,11 @@
         {% if winners %}
         {% for winner in winners %}
         <div class="winner active" id="winner1">
-            <img src="{{ url_for('get_image', id=winner.lgame_id, title='winner') }}" alt="Winner 1">
+            <img src="{{ url_for('get_image', id=winner.lgame_id, title='winner') }}" alt="Winner">
             <p><strong>{{winner.team_name}}</strong> - Winner of {{winner.title}}</p>
         </div>
         {% endfor %}
         {% endif %}
-        <!-- <div class="winner" id="winner2">
-            <img src="https://via.placeholder.com/100" alt="Winner 2">
-            <p><strong>Jane Smith</strong> - Winner of Challenge 2</p>
-        </div>
-        <div class="winner" id="winner3">
-            <img src="https://via.placeholder.com/100" alt="Winner 3">
-            <p><strong>Samuel Johnson</strong> - Winner of Challenge 3</p>
-        </div> -->
     </section>
 
     <!-- Stats Section -->
@@ -89,7 +81,7 @@
         <h2>Contact Us</h2>
         <p>Connect with us through social media or drop us an email. We'd love to hear from you!</p>
         <div class="contact-details">
-            <p>Email: <a href="mailto:support@challenges.com">skillsonly16@gmail.com.com</a></p>
+            <p>Email: <a href="mailto:skillsonly16@gmail.com.com">skillsonly16@gmail.com.com</a></p>
             <div class="social-media">
                 <a href="https://www.youtube.com/@Just_Gamer0" target="_blank">
                     <i class="fa-brands fa-youtube fa-2xl" style="color: #e66565;"></i>
